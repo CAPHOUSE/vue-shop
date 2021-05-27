@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Button,Form,FormItem,Input,Message,Container,Header,Aside,Main,Menu,Submenu,MenuItemGroup,
-        MenuItem} from 'element-ui'
+        MenuItem,Breadcrumb,BreadcrumbItem,Card,Row,Col} from 'element-ui'
 
 
 Vue.use(Button)
@@ -15,6 +15,11 @@ Vue.use(Menu)
 Vue.use(Submenu)
 Vue.use(MenuItemGroup)
 Vue.use(MenuItem)
+Vue.use(Breadcrumb)
+Vue.use(BreadcrumbItem)
+Vue.use(Card)
+Vue.use(Row)
+Vue.use(Col)
 
 //挂载message
 Vue.prototype.$message = Message;

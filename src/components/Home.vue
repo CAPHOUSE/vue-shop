@@ -11,26 +11,35 @@
 <!--      页面主体区域-->
           <el-container>
 <!--            侧面-->
-            <el-aside width="200px">
+            <el-aside :width="isCollapse ? '64px':'200px'">
+            <div class="toggle-button" @click="toggle">
+                |||
+            </div>
+            <!--侧边栏-->
+              <el-menu background-color="#333744" text-color="#fff" :collapse-transition='false'
+                       active-text-color="#409eff" unique-opened :collapse="isCollapse" router
+                       :default-active="activePath">
 
-              <el-menu background-color="#333744" text-color="#fff" active-text-color="#ffd04b">
-                <el-submenu index="1">
+                <el-submenu :index="item.id + ''" v-for="(item,index) in menuList" :key="item.id">
                   <template slot="title">
-                    <i class="el-icon-location"></i>
-                    <span>导航一</span>
+                    <i v-bind:class="iconsObj[item.id]"></i>
+                    <span>{{item.authName}}</span>
                   </template>
 
-                  <el-menu-item index="1-4-1">
+                  <el-menu-item :index="subItem.path +''" v-for="(subItem,index) in item.children"
+                  :key="subItem.id" @click="saveNavState('/' + subItem.path)">
                     <template slot="title">
-                      <i class="el-icon-location"></i>
-                      <span>导航一</span>
+                      <i class="el-icon-menu"></i>
+                      <span>{{subItem.authName}}</span>
                     </template>
                   </el-menu-item>
                 </el-submenu>
               </el-menu>
             </el-aside>
 
-            <el-main>Main</el-main>
+            <el-main>
+              <router-view></router-view>
+            </el-main>
           </el-container>
       </el-container>
 
@@ -42,7 +51,16 @@ export default {
   name: 'Home',
   data(){
     return{
-      menuList: []
+      menuList: [],
+      iconsObj: {
+        '1': 'el-icon-user-solid',
+        '2': 'el-icon-s-data',
+        '3': 'el-icon-s-goods',
+        '4': 'el-icon-s-order',
+        '5': 'el-icon-s-platform'
+      },
+      isCollapse: false,
+      activePath: ''
     }
   },
   methods: {
@@ -56,9 +74,18 @@ export default {
         this.$message.error(result.data.message)
       }
       this.menuList = result.data.data;
+    },
+    //点击按钮切换菜单的折叠
+    toggle(){
+        this.isCollapse = !this.isCollapse;
+    },
+    saveNavState(activePath){
+      window.sessionStorage.setItem("activePath",activePath);
+      this.activePath = activePath;
     }
   },
   created () {
+    this.activePath = window.sessionStorage.getItem("activePath")
     this.getMenuList();
   }
 }
@@ -73,6 +100,9 @@ export default {
     background-color: #373d41;
     color: #fff;
     font-size: 20px;
+  }
+  .el-aside .el-menu{
+      border-right: none;
   }
   .el-header div{
     display: flex;
@@ -89,6 +119,15 @@ export default {
   }
   .home-container{
     height: 100%;
+  }
+  .toggle-button{
+    background-color: #4a5064;
+    font-size: 10px;
+    line-height: 30px;
+    color: #fff;
+    text-align: center;
+    letter-spacing: 0.2em;
+    cursor: pointer;
   }
 
 </style>
