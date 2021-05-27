@@ -6,9 +6,15 @@ import './assets/css/global.css' //导入全局样式
 import axios from 'axios' //axios
 
 //配置axios
-Vue.prototype.$http = axios
-Vue.config.productionTip = false
 axios.defaults.baseURL="http://localhost:8080/"
+axios.interceptors.request.use(config => {
+  console.log(config)
+  config.headers.Authorization = window.sessionStorage.getItem("token");
+  return config;
+})
+Vue.prototype.$http = axios
+
+Vue.config.productionTip = false
 
 new Vue({
   router,
